@@ -59,6 +59,13 @@ The supplied simple AES implementation shown <<reference-simple-aes>> was suppli
 
 We wanted to have a known working encryption and decryption implementation to compare our implementation against. For this we build simple implementation using the openssl library, as shown in <<reference-openssl-aes>>. We then verified that the openssl implementation produces the same output as the simple implementation.
 
+<<inverting-the-sbox>> shows our function for calculation the inverted SBOX table. It swaps the indices and values of the SBOX table, to create the inverted table.
+
+.`openssl` based AES tool
+[source#inverting-the-sbox.linenums,cpp]
+----
+include::src/invert-sbox.cpp[tag=invert-sbox]
+----
 
 
 == Appendix
@@ -70,9 +77,9 @@ include::src/simple-aes.cpp[]
 ----
 
 .`openssl` based AES tool
-[source#reference-simple-aes.linenums,cpp]
+[source#reference-openssl-aes.linenums,cpp]
 ----
-include::src/simple-aes.cpp[]
+include::src/openssl-aes.cpp[]
 ----
 
 include::scripts/trailing-scripts.adoc[]

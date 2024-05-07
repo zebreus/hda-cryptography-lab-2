@@ -12,7 +12,7 @@ PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 
 # .EXTRA_PREREQS:=Makefile
 .PHONY: all pdf preview
-all: paper.pdf
+all: Readme.pdf
 preview: paper-preview
 
 SCSS_FILES = $(wildcard styles/*.scss) $(wildcard styles/*/*.scss) $(wildcard styles/*/*/*.scss)

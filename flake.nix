@@ -1,5 +1,5 @@
 {
-  description = "Write your scientific paper in asciidoc";
+  description = "Report for the first lab of the cryptography course at h_da";
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
@@ -11,7 +11,7 @@
       rec {
         pkgs = import nixpkgs { inherit system; };
 
-        name = "thesis-template";
+        name = "hda-cryptography-lab1";
         packages.default = import ./default.nix { pkgs = pkgs; };
       }
     );

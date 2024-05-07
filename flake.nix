@@ -22,7 +22,41 @@
           };
 
         name = "hda-cryptography-lab-2";
-        packages.default = import ./default.nix { pkgs = pkgs; };
+        # Use `nix run` to build the report
+        packages.default = pkgs.writeShellApplication
+          {
+            name = "hda-cryptography-lab-2";
+
+            runtimeInputs = with pkgs; [
+              python3
+              asciidoctor-web-pdf
+              asciidoctor-js
+              sass
+              gnumake
+              jq
+            ];
+
+            text = ''
+              make Readme.pdf
+            '';
+          };
+        # Use `nix develop` to enter a shell with all dependencies
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs;
+            [
+              python3
+              asciidoctor-web-pdf
+              asciidoctor-js
+              sass
+              gnumake
+              nixpkgs-fmt
+              nil
+              jq
+              llvmPackages_18.clang
+              openssl
+              clang-tools
+            ];
+        };
       }
     );
 }

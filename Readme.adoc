@@ -75,6 +75,17 @@ include::src/invert-sbox.cpp[tag=invert-sbox]
 include::src/simple-aes.cpp[tag=main]
 ----
 
+== Simple AES cracking
+
+For the second exercise we were tasked with recovering a partially lost 128-bit (16-byte) AES key (shown in <<partially-known-key>>). We were supplied with the first 13 bytes of the key and a ciphertext that is known to decrypt to only ASCII characters matching the regex `[a-z.]`. The partial key and the ciphertext are shown in <<recovery-supplied-data>>.
+
+.Supplied data for the second exercise
+[source#recovery-supplied-data.linenums,cpp]
+----
+include::src/key-recovery.cpp[tag=supplied-data]
+----
+
+// We only know the first 13 bytes of the key, so we need to bruteforce the remaining 3 bytes.
 
 == Appendix
 

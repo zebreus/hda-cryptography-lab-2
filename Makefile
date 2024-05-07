@@ -12,7 +12,7 @@ PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 
 # .EXTRA_PREREQS:=Makefile
 .PHONY: all pdf preview test
-all: Readme.pdf compare-implementations key-recovery simple-aes openssl-aes invert-sbox
+all: Readme.pdf test
 preview: paper-preview
 
 SCSS_FILES = $(wildcard styles/*.scss) $(wildcard styles/*/*.scss) $(wildcard styles/*/*/*.scss)
@@ -39,16 +39,6 @@ $(PROCESSED_CHARTS) : processed-assets/%.vl.json : assets/%.vl.json $(VEGA_DATA_
 	mkdir -p $(dir $@)
 	bash scripts/process_chart.sh $< > $@
 	touch $@
-
-# data:
-# 	cd experiments && make data
-# 	make $(VEGA_DATA_FILES)
-
-# $(ALL_DATA_JSON):
-# 	cd experiments && make data
-
-# $(VEGA_DATA_FILES) &: $(ALL_DATA_JSON) data/make_data.sh
-# 	bash data/make_data.sh $< data
 
 clean:
 	rm -rf compare-implementations simple-aes openssl-aes invert-sbox key-recovery *.pcm *.html *.css

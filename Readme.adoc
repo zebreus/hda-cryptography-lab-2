@@ -51,13 +51,13 @@ by +
 
 // Main part starts here
 [.reset-pages]
-== Introduction
-
-=== Simple AES programming
+== Simple AES programming
 
 The supplied simple AES implementation shown <<reference-simple-aes>> was supplied as a reference. However, the inverse S-Box required for decryption is missing. Our first task is to implement the inverse S-Box and then use it to implement the decryption function.
 
 We wanted a known working encryption and decryption implementation to compare our implementation against. We build a simple implementation using the OpenSSL library, as shown in <<reference-openssl-aes>>. We then verified that the OpenSSL implementation produces the same output as the simple implementation.
+
+=== Inverting the S-Box
 
 <<inverting-the-sbox>> shows our function for calculating the inverted S-Box table. It swaps the indices and values of the S-Box table to create the inverted table.
 
@@ -66,6 +66,8 @@ We wanted a known working encryption and decryption implementation to compare ou
 ----
 include::src/invert-sbox.cpp[tag=invert-sbox]
 ----
+
+=== Validating the S-Box
 
 The inverted S-Box (<<inverted-sbox>>) was placed into the AES implementation. We confirmed that the decryption function works correctly by testing the implementation against 1000000 random blocks and keys. As shown in <<fuzzing-decryption>>, we validated the result for each block by comparing it with the OpenSSL implementation.
 

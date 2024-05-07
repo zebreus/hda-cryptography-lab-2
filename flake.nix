@@ -11,7 +11,7 @@
       rec {
         pkgs = import nixpkgs { inherit system; };
 
-        name = "hda-cryptography-lab1";
+        name = "hda-cryptography-lab-2";
         packages.default = import ./default.nix { pkgs = pkgs; };
       }
     );

@@ -3,7 +3,7 @@
 
 with pkgs;
 stdenv.mkDerivation rec {
-  pname = "thesis-template";
+  pname = "hda-cryptography-lab-2";
   version = "0.0.0";
 
   src = ./.;
@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
     nixpkgs-fmt
     nil
     jq
+    clang
+    openssl
+    clang-tools
   ];
 
   buildPhase = ''

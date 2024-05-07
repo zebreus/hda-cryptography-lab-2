@@ -6,3 +6,5 @@ processed-assets
 openssl-aes
 simple-aes
 invert-sbox
+key-recovery
+/*.pcm

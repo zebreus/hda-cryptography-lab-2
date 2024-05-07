@@ -77,8 +77,10 @@
     "ranges": "cpp",
     "span": "cpp",
     "optional": "cpp",
-    "map": "cpp"
-  }
+    "map": "cpp",
+    "variant": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "enabled"
   //     "asciidoc.preview.scrollPreviewWithEditor": false,
   //   "asciidoc.preview.scrollEditorWithPreview": false,
 }

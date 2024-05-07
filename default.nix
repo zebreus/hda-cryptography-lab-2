@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     nixpkgs-fmt
     nil
     jq
-    clang
+    llvmPackages_18.clang
     openssl
     clang-tools
   ];

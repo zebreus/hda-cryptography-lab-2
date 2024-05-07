@@ -66,3 +66,10 @@ openssl-aes: src/openssl-aes.cpp
 
 invert-sbox: src/invert-sbox.cpp
 	clang++ --std=c++20 -O3 -Wall $< -o $@
+
+%.pcm: src/%.cppm
+	clang++ -std=c++20 $< --precompile -o $@
+
+key-recovery: src/key-recovery.cpp AesFunctions.pcm
+	clang++ -std=c++20 -fprebuilt-module-path=. $^ -o $@ -lcrypto
+	

@@ -8,3 +8,4 @@ simple-aes
 invert-sbox
 key-recovery
 /*.pcm
+compare-implementations

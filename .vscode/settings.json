@@ -80,7 +80,14 @@
     "map": "cpp",
     "variant": "cpp"
   },
-  "C_Cpp.errorSquiggles": "enabled"
+  "C_Cpp.errorSquiggles": "enabled",
+  "grammarly.selectors": [
+    {
+      "language": "asciidoc",
+      "scheme": "file",
+      "pattern": "Readme.adoc"
+    }
+  ]
   //     "asciidoc.preview.scrollPreviewWithEditor": false,
   //   "asciidoc.preview.scrollEditorWithPreview": false,
 }

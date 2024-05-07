@@ -32,7 +32,7 @@ int main() {
     invertedSbox[SBOX[i]] = i;
   }
 
-  std::printf("static const unsigned char INVERTED_SBOX[256] = {");
+  std::printf("static const unsigned char INV_SBOX[256] = {");
   for (auto element : invertedSbox) {
     std::printf("0x%x,", element);
   }

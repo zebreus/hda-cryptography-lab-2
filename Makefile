@@ -11,8 +11,8 @@ VEGA_DATA_FILES = $(addprefix assets/,$(shell grep -Poh "[^\"]+.csv" $(VEGA_CHAR
 PROCESSED_CHARTS = $(addprefix processed-assets/,$(notdir $(VEGA_CHART_FILES)))
 
 # .EXTRA_PREREQS:=Makefile
-.PHONY: all pdf preview
-all: Readme.pdf
+.PHONY: all pdf preview test
+all: Readme.pdf compare-implementations key-recovery simple-aes openssl-aes invert-sbox
 preview: paper-preview
 
 SCSS_FILES = $(wildcard styles/*.scss) $(wildcard styles/*/*.scss) $(wildcard styles/*/*/*.scss)
@@ -51,7 +51,7 @@ $(PROCESSED_CHARTS) : processed-assets/%.vl.json : assets/%.vl.json $(VEGA_DATA_
 # 	bash data/make_data.sh $< data
 
 clean:
-	rm -rf 
+	rm -rf compare-implementations simple-aes openssl-aes invert-sbox key-recovery *.pcm *.html *.css
 
 dist-clean: clean
 	rm -rf $(TARGETS)
@@ -72,4 +72,15 @@ invert-sbox: src/invert-sbox.cpp
 
 key-recovery: src/key-recovery.cpp AesFunctions.pcm
 	clang++ -std=c++20 -fprebuilt-module-path=. $^ -o $@ -lcrypto
+
+compare-implementations: src/compare-implementations.cpp AesFunctions.pcm
+	clang++ -std=c++20 -fprebuilt-module-path=. $^ -o $@ -lcrypto
+
+# Verify that the implementations work
+test:	compare-implementations simple-aes openssl-aes invert-sbox key-recovery
+	./compare-implementations
+	./simple-aes
+	./openssl-aes
+	./invert-sbox
+	./key-recovery
 	

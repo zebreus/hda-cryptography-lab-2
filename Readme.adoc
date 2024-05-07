@@ -20,7 +20,7 @@
 :title-page: false
 // Refer to things like "Figure 1" instead of by their name
 :xrefstyle: short
-// Prefetch and inline diagrams with kroki but not in vscode
+// Prefetch and inline diagrams with kroki but not in VSCode
 ifndef::env-vscode[]
 :kroki-fetch-diagram: true
 :kroki-default-options: inline
@@ -55,29 +55,29 @@ by +
 
 === Simple AES programming
 
-The supplied simple AES implementation shown <<reference-simple-aes>> was supplied as a reference. However it is missing the inverse S-Box required for decryption. Our first task is to implement the inverse S-Box and then use it to implement the decryption function.
+The supplied simple AES implementation shown <<reference-simple-aes>> was supplied as a reference. However, the inverse S-Box required for decryption is missing. Our first task is to implement the inverse S-Box and then use it to implement the decryption function.
 
-We wanted to have a known working encryption and decryption implementation to compare our implementation against. For this we build simple implementation using the openssl library, as shown in <<reference-openssl-aes>>. We then verified that the openssl implementation produces the same output as the simple implementation.
+We wanted a known working encryption and decryption implementation to compare our implementation against. We build a simple implementation using the OpenSSL library, as shown in <<reference-openssl-aes>>. We then verified that the OpenSSL implementation produces the same output as the simple implementation.
 
-<<inverting-the-sbox>> shows our function for calculation the inverted SBOX table. It swaps the indices and values of the SBOX table, to create the inverted table.
+<<inverting-the-sbox>> shows our function for calculating the inverted S-Box table. It swaps the indices and values of the S-Box table to create the inverted table.
 
-.Function for inverting the SBOX
+.Function for inverting the S-Box
 [source#inverting-the-sbox.linenums,cpp]
 ----
 include::src/invert-sbox.cpp[tag=invert-sbox]
 ----
 
-We added the inverted SBOX into the simple AES implementation. We confirmed that the decryption function now works correctly by fuzzing the implementation against 1000000 random blocks and keys. As shown in <<fuzzing-decryption>>, we validated the result for each block by comparing it with the openssl implementation.
+The inverted S-Box (<<inverted-sbox>>) was placed into the AES implementation. We confirmed that the decryption function works correctly by testing the implementation against 1000000 random blocks and keys. As shown in <<fuzzing-decryption>>, we validated the result for each block by comparing it with the OpenSSL implementation.
 
-.Setup for comparing our implementation against openssl
+.Setup for comparing our implementation against OpenSSL
 [source#fuzzing-decryption.linenums,cpp]
 ----
-include::src/simple-aes.cpp[tag=main]
+include::src/compare-implementations.cpp[tag=main]
 ----
 
 == Simple AES cracking
 
-For the second exercise we were tasked with recovering a partially lost 128-bit (16-byte) AES key. We were supplied with the first 13 bytes of the key and a ciphertext that is known to decrypt to only ASCII characters matching the regex `[a-z.]`. The partial key and the ciphertext are shown in <<recovery-supplied-data>>.
+For the second exercise, we were tasked with recovering a partially lost 128-bit (16-byte) AES key. We were supplied with the first 13 bytes of the key and a ciphertext that is known to decrypt only to contain lowercase letters and the `.` character. The partial key and the ciphertext are shown in <<recovery-supplied-data>>.
 
 .Supplied data for the second exercise
 [source#recovery-supplied-data.linenums,cpp]
@@ -87,13 +87,13 @@ include::src/key-recovery.cpp[tag=supplied-data]
 
 === Estimating performance
 
-We only know the first 13 bytes of the key, so we need to bruteforce the remaining 3 bytes. Three bytes are 24 bits, which means we have to try $2^{24}$ keys. If we can test $2^{21}$ keys per second, we will need 2^3 seconds to test all keys. This is 8 seconds, which is a reasonable time frame for a bruteforce attack.
+We only know the first 13 bytes of the key, so we need to brute force the remaining 3 bytes. Three bytes are 24 bits, so we must try stem:[2^24] keys. If we can test stem:[2^21] keys per second, we will need stem:[2^3] seconds to test all keys. This is stem:[8] seconds, a reasonable time frame for a brute-force attack.
 
-NOTE:: The performance of 2^21 keys per second is a wild guess based on nothing.
+NOTE:: The performance of stem:[2^21] keys per second is a wild guess based on nothing.
 
 === Implementing the recovery tool
 
-We used the AES functions from the previous exercise to implement the recovery tool. <<key-recovery-tool>> shows that we bruteforce the remaining 3 bytes of the key and check if the the characters of the decrypted text match the requirements. If it does, we print the key and the decrypted text.
+We used the AES functions from the previous exercise to implement the recovery tool. <<key-recovery-tool>> shows that we brute force the remaining 3 bytes of the key and check if the characters of the decrypted text match the requirements. If it does, we print the key and the decrypted text.
 
 .Our key recovery tool
 [source#key-recovery-tool.linenums,cpp]
@@ -101,12 +101,12 @@ We used the AES functions from the previous exercise to implement the recovery t
 include::src/key-recovery.cpp[tag=main]
 ----
 
-Running the tool takes 4.5 seconds on our machine. The output of the tool is shown in <<key-recovery-tool-output>>. We found the key to be `81596bfb39c62b716e52db9181dabeef` and the decrypted text is `thiswasatriumph.`.
+Running the tool takes 4.5 seconds on our machine, which aligns with the expected value. The output of the tool is shown in <<key-recovery-tool-output>>. We found the key to be `81596bfb39c62b716e52db9181dabeef`, and the decrypted text is `thiswasatriumph.`.
 
 .Output of the key recovery tool
 [source#key-recovery-tool-output.linenums,console]
 ----
-lennart@erms ~/D/hda-cryptography-lab-2> time ./key-recovery                                                                                                                                          hda-cryptography-lab-2-0.0.0-env
+lennart@erms ~/hda-cryptography-lab-2> time ./key-recovery
 Found key: 81596bfb39c62b716e52db9181dabeef
 Decrypted text is:
 thiswasatriumph.
@@ -115,9 +115,22 @@ thiswasatriumph.
 
 == Conclusion
 
-We successfully implemented the decryption function for the simple AES implementation and verified it against the openssl implementation. We then used the AES functions to recover a partially lost key. We found the key to be `81596bfb39c62b716e52db9181dabeef` and the decrypted text to be `thiswasatriumph.`.
+We successfully implemented the decryption function for the simple AES implementation and verified it against the OpenSSL implementation. We then used the AES functions to recover a partially lost key. We found the key to be `81596bfb39c62b716e52db9181dabeef` and the decrypted text to be `thiswasatriumph.`.
+
+[glossary]
+== List of abbreviations
+
+[glossary]
+[[AES]]AES:: Advanced Encryption Standard link:pass:[https://en.wikipedia.org/wiki/Advanced_Encryption_Standard][🔗^]
+[[S-Box]]S-Box:: Substitution box link:pass:[https://en.wikipedia.org/wiki/S-box][🔗^]
 
 == Appendix
+
+.Inverted S-Box
+[source#inverted-sbox.linenums,cpp]
+----
+include::src/AesFunctions.cppm[tag=inverted-sbox]
+----
 
 .Simple reference AES implementation
 [source#reference-simple-aes.linenums,cpp]

@@ -73,7 +73,11 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "cinttypes": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "ranges": "cpp",
+    "span": "cpp",
+    "optional": "cpp",
+    "map": "cpp"
   }
   //     "asciidoc.preview.scrollPreviewWithEditor": false,
   //   "asciidoc.preview.scrollEditorWithPreview": false,

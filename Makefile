@@ -59,7 +59,7 @@ dist-clean: clean
 .PHONY: clean all dist-clean process-charts data
 
 simple-aes: src/simple-aes.cpp
-	clang++ --std=c++20 -O3 -Wall $< -o $@
+	clang++ --std=c++20 -O3 -Wall $< -o $@ -lcrypto
 
 openssl-aes: src/openssl-aes.cpp
 	clang++ --std=c++20 -O3 -Wall $< -o $@ -lcrypto

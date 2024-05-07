@@ -1,4 +1,15 @@
+#include <algorithm>
+#include <cassert>
+#include <exception>
+#include <fcntl.h>
 #include <iostream>
+#include <iterator>
+#include <map>
+#include <openssl/aes.h>
+#include <openssl/evp.h>
+#include <random>
+#include <ranges>
+#include <unistd.h>
 
 const unsigned int NUM_ROUNDS = 4 + 6;
 
@@ -274,32 +285,76 @@ void decipher(const unsigned char *in, const unsigned char *roundKey,
   }
 }
 
-int main(int argc, char *argv[]) {
+std::array<unsigned char, 16>
+simple_encrypt(std::array<unsigned char, 16> plaintext,
+               std::array<unsigned char, 16> key) {
   unsigned char roundKey[240];
-  unsigned char out[16];
-
-  // Sample
-  {
-    const unsigned char in[16] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-                                  'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'};
-    const unsigned char key[16] = {0xa3, 0x28, 0x4e, 0x09, 0xc6, 0xfe,
-                                   0x53, 0x29, 0x97, 0xef, 0x6d, 0x10,
-                                   0x74, 0xc3, 0xde, 0xad};
-
-    std::cout << std::endl
-              << "Text before encryption:" << std::hex << std::endl;
-    for (unsigned int i = 0; i != 4 * 4; ++i)
-      std::cout << "0x" << (unsigned int)in[i] << ", ";
-    std::cout << std::endl;
-
-    keyExpansion(key, roundKey);
-    cipher(in, roundKey, out);
-
-    std::cout << std::endl << "Text after encryption:" << std::hex << std::endl;
-    for (unsigned int i = 0; i != 4 * 4; ++i)
-      std::cout << "0x" << (unsigned int)out[i] << ", ";
-    std::cout << std::endl;
-  }
-
-  return 0;
+  std::array<unsigned char, 16> ciphertext;
+  keyExpansion(key.data(), roundKey);
+  cipher(plaintext.data(), roundKey, ciphertext.data());
+  return ciphertext;
 }
+
+std::array<unsigned char, 16>
+simple_decrypt(std::array<unsigned char, 16> ciphertext,
+               std::array<unsigned char, 16> key) {
+  unsigned char roundKey[240];
+  std::array<unsigned char, 16> plaintext;
+  keyExpansion(key.data(), roundKey);
+  decipher(ciphertext.data(), roundKey, plaintext.data());
+  return plaintext;
+}
+
+std::array<unsigned char, 16>
+simple_openssl_encrypt(std::array<unsigned char, 16> plaintext,
+                       std::array<unsigned char, 16> key) {
+  AES_KEY aes_key;
+  AES_set_encrypt_key(key.data(), 128, &aes_key);
+  std::array<unsigned char, 16> ciphertext;
+  AES_encrypt(plaintext.data(), ciphertext.data(), &aes_key);
+  return ciphertext;
+}
+
+std::array<unsigned char, 16>
+simple_openssl_decrypt(std::array<unsigned char, 16> ciphertext,
+                       std::array<unsigned char, 16> key) {
+  AES_KEY aes_key;
+  AES_set_decrypt_key(key.data(), 128, &aes_key);
+  std::array<unsigned char, 16> plaintext;
+  AES_decrypt(ciphertext.data(), plaintext.data(), &aes_key);
+  return plaintext;
+}
+
+// tag::main[]
+int main() {
+  int devRandom = open("/dev/random", O_RDONLY);
+
+  for (int round = 0; round < 1000000; ++round) {
+    std::array<unsigned char, 16> plaintext, key;
+    read(devRandom, plaintext.data(), 16);
+    read(devRandom, key.data(), 16);
+
+    // Cipher with our implementation
+    auto ciphertext = simple_encrypt(plaintext, key);
+    auto decryptedPlaintext = simple_decrypt(ciphertext, key);
+    // Cipher with openssl
+    auto ciphertextOpenssl = simple_openssl_encrypt(plaintext, key);
+    auto decryptedPlaintextOpenssl =
+        simple_openssl_decrypt(ciphertextOpenssl, key);
+
+    if (!std::ranges::equal(ciphertext, ciphertextOpenssl)) {
+      printf("OpenSSL and simple encryption produced different ciphertexts");
+      exit(1);
+    }
+    if (!std::ranges::equal(plaintext, decryptedPlaintext)) {
+      printf("Decryption did not produce the original plaintext");
+      exit(1);
+    }
+    if (!std::ranges::equal(decryptedPlaintext, decryptedPlaintextOpenssl)) {
+      printf("OpenSSL and simple decryption produced different results");
+      exit(1);
+    }
+  }
+  std::printf("Encryption and decryption seems to work\n");
+}
+// end::main[]

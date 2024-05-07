@@ -1,37 +1,80 @@
 {
-    "nix.serverPath": "nil",
-    "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+  "nix.enableLanguageServer": true,
 
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.enabled": true,
+  "asciidoc.extensions.enableKroki": true,
+  "asciidoc.preview.asciidoctorAttributes": {
+    "kroki-server-url": "https://kroki.io",
+    "kroki-default-options": "none"
+  },
+
+  "[markdown][asciidoc][plaintext]": {
+    "editor.wordWrap": "on",
+    "editor.acceptSuggestionOnEnter": "off",
     "editor.formatOnSave": true,
     "editor.inlineSuggest.enabled": true,
-    "asciidoc.extensions.enableKroki": true,
-    "asciidoc.preview.asciidoctorAttributes": {
-        "kroki-server-url": "https://kroki.io",
-        "kroki-default-options": "none"
-    },
+    "editor.stickyScroll.enabled": true
+  },
 
-    "[markdown][asciidoc][plaintext]": {
-        "editor.wordWrap": "on",
-        "editor.acceptSuggestionOnEnter": "off",
-        "editor.formatOnSave": true,
-        "editor.inlineSuggest.enabled": true,
-        "editor.stickyScroll.enabled": true,
-    },
-
-    "grammarly.config.documentDialect": "american",
-    "grammarly.config.documentDomain": "academic",
-    "grammarly.config.suggestions.InformalPronounsAcademic": true,
-    "grammarly.config.suggestions.OxfordComma": true,
-    "grammarly.config.suggestions.UnnecessaryEllipses": true,
-    "grammarly.config.suggestions.PunctuationWithQuotation": false,
-    // Allow the page property in CSS and SCSS
-    "css.lint.validProperties": [
-        "page"
-    ],
-    "scss.lint.validProperties": [
-        "page"
-    ],
-    "asciidoc.antora.enableAntoraSupport": false,
-    //     "asciidoc.preview.scrollPreviewWithEditor": false,
-    //   "asciidoc.preview.scrollEditorWithPreview": false,
+  "grammarly.config.documentDialect": "american",
+  "grammarly.config.documentDomain": "academic",
+  "grammarly.config.suggestions.InformalPronounsAcademic": true,
+  "grammarly.config.suggestions.OxfordComma": true,
+  "grammarly.config.suggestions.UnnecessaryEllipses": true,
+  "grammarly.config.suggestions.PunctuationWithQuotation": false,
+  // Allow the page property in CSS and SCSS
+  "css.lint.validProperties": ["page"],
+  "scss.lint.validProperties": ["page"],
+  "asciidoc.antora.enableAntoraSupport": false,
+  "files.associations": {
+    "array": "cpp",
+    "atomic": "cpp",
+    "bit": "cpp",
+    "*.tcc": "cpp",
+    "cctype": "cpp",
+    "clocale": "cpp",
+    "cmath": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "cstdarg": "cpp",
+    "cstddef": "cpp",
+    "cstdint": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cwchar": "cpp",
+    "cwctype": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "vector": "cpp",
+    "exception": "cpp",
+    "algorithm": "cpp",
+    "functional": "cpp",
+    "iterator": "cpp",
+    "memory": "cpp",
+    "memory_resource": "cpp",
+    "numeric": "cpp",
+    "random": "cpp",
+    "string_view": "cpp",
+    "system_error": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "utility": "cpp",
+    "initializer_list": "cpp",
+    "iosfwd": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "limits": "cpp",
+    "new": "cpp",
+    "numbers": "cpp",
+    "ostream": "cpp",
+    "stdexcept": "cpp",
+    "streambuf": "cpp",
+    "cinttypes": "cpp",
+    "typeinfo": "cpp"
+  }
+  //     "asciidoc.preview.scrollPreviewWithEditor": false,
+  //   "asciidoc.preview.scrollEditorWithPreview": false,
 }

@@ -35,7 +35,7 @@ Darmstadt University of Applied Sciences
 Faculty of Computer Science
 
 [discrete#main-title]
-= cryptography lab report 2
+= Cryptography Lab Report 2
 
 [.presented-by.text-center]
 by +
@@ -51,8 +51,6 @@ by +
 
 // Main part starts here
 [.reset-pages]
-= Report
-
 == Introduction
 
 === Simple AES programming
@@ -61,13 +59,15 @@ The supplied simple AES implementation shown <<reference-simple-aes>> was suppli
 
 We wanted to have a known working encryption and decryption implementation to compare our implementation against. For this we build simple implementation using the openssl library, as shown in <<reference-openssl-aes>>. We then verified that the openssl implementation produces the same output as the simple implementation.
 
-<<inverting-the-sbox>> shows our function for calculation the inverted SBOX table. It swaps the indices and values of the SBOX table, to create the inverted table. We added the inverted SBOX into the simple AES implementation. We confirmed that the decryption function now works correctly by fuzzing the implementation against 1000000 random blocks and keys. As shown in <<fuzzing-decryption>>, we validated the result for each block by comparing it with the openssl implementation.
+<<inverting-the-sbox>> shows our function for calculation the inverted SBOX table. It swaps the indices and values of the SBOX table, to create the inverted table.
 
-.`openssl` based AES tool
+.Function for inverting the SBOX
 [source#inverting-the-sbox.linenums,cpp]
 ----
 include::src/invert-sbox.cpp[tag=invert-sbox]
 ----
+
+We added the inverted SBOX into the simple AES implementation. We confirmed that the decryption function now works correctly by fuzzing the implementation against 1000000 random blocks and keys. As shown in <<fuzzing-decryption>>, we validated the result for each block by comparing it with the openssl implementation.
 
 .Setup for comparing our implementation against openssl
 [source#fuzzing-decryption.linenums,cpp]
@@ -77,7 +77,7 @@ include::src/simple-aes.cpp[tag=main]
 
 == Simple AES cracking
 
-For the second exercise we were tasked with recovering a partially lost 128-bit (16-byte) AES key (shown in <<partially-known-key>>). We were supplied with the first 13 bytes of the key and a ciphertext that is known to decrypt to only ASCII characters matching the regex `[a-z.]`. The partial key and the ciphertext are shown in <<recovery-supplied-data>>.
+For the second exercise we were tasked with recovering a partially lost 128-bit (16-byte) AES key. We were supplied with the first 13 bytes of the key and a ciphertext that is known to decrypt to only ASCII characters matching the regex `[a-z.]`. The partial key and the ciphertext are shown in <<recovery-supplied-data>>.
 
 .Supplied data for the second exercise
 [source#recovery-supplied-data.linenums,cpp]
@@ -85,7 +85,37 @@ For the second exercise we were tasked with recovering a partially lost 128-bit 
 include::src/key-recovery.cpp[tag=supplied-data]
 ----
 
-// We only know the first 13 bytes of the key, so we need to bruteforce the remaining 3 bytes.
+=== Estimating performance
+
+We only know the first 13 bytes of the key, so we need to bruteforce the remaining 3 bytes. Three bytes are 24 bits, which means we have to try $2^{24}$ keys. If we can test $2^{21}$ keys per second, we will need 2^3 seconds to test all keys. This is 8 seconds, which is a reasonable time frame for a bruteforce attack.
+
+NOTE:: The performance of 2^21 keys per second is a wild guess based on nothing.
+
+=== Implementing the recovery tool
+
+We used the AES functions from the previous exercise to implement the recovery tool. <<key-recovery-tool>> shows that we bruteforce the remaining 3 bytes of the key and check if the the characters of the decrypted text match the requirements. If it does, we print the key and the decrypted text.
+
+.Our key recovery tool
+[source#key-recovery-tool.linenums,cpp]
+----
+include::src/key-recovery.cpp[tag=main]
+----
+
+Running the tool takes 4.5 seconds on our machine. The output of the tool is shown in <<key-recovery-tool-output>>. We found the key to be `81596bfb39c62b716e52db9181dabeef` and the decrypted text is `thiswasatriumph.`.
+
+.Output of the key recovery tool
+[source#key-recovery-tool-output.linenums,console]
+----
+lennart@erms ~/D/hda-cryptography-lab-2> time ./key-recovery                                                                                                                                          hda-cryptography-lab-2-0.0.0-env
+Found key: 81596bfb39c62b716e52db9181dabeef
+Decrypted text is:
+thiswasatriumph.
+./key-recovery  4,49s user 0,00s system 98% cpu 4,556 total
+----
+
+== Conclusion
+
+We successfully implemented the decryption function for the simple AES implementation and verified it against the openssl implementation. We then used the AES functions to recover a partially lost key. We found the key to be `81596bfb39c62b716e52db9181dabeef` and the decrypted text to be `thiswasatriumph.`.
 
 == Appendix
 

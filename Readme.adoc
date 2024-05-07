@@ -55,12 +55,22 @@ by +
 
 == Introduction
 
-Text goes here
+The supplied simple AES implementation shown <<reference-simple-aes>> was supplied as a reference. However it is missing the inverse S-Box required for decryption. Our first task is to implement the inverse S-Box and then use it to implement the decryption function.
+
+We wanted to have a known working encryption and decryption implementation to compare our implementation against. For this we build simple implementation using the openssl library, as shown in <<reference-openssl-aes>>. We then verified that the openssl implementation produces the same output as the simple implementation.
+
+
 
 == Appendix
 
 .Simple reference AES implementation
-[source#extra-long-rust-listing.linenums,cpp]
+[source#reference-simple-aes.linenums,cpp]
+----
+include::src/simple-aes.cpp[]
+----
+
+.`openssl` based AES tool
+[source#reference-simple-aes.linenums,cpp]
 ----
 include::src/simple-aes.cpp[]
 ----

@@ -57,3 +57,9 @@ dist-clean: clean
 	rm -rf $(TARGETS)
 
 .PHONY: clean all dist-clean process-charts data
+
+simple-aes: src/simple-aes.cpp
+	clang++ -O3 -Wall src/simple-aes.cpp -o simple-aes
+
+openssl-aes: src/openssl-aes.cpp
+	clang++ -O3 -Wall src/openssl-aes.cpp -o openssl-aes -lcrypto

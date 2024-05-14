@@ -41,6 +41,9 @@ Faculty of Computer Science
 by +
 *Lennart Eichhorn* +
 [small]+Matriculation number: 759253+ +
+and +
+*Oliver Hanikel* +
+[small]+Matriculation number: 765349+ +
 
 
 // Start with section and part numbering

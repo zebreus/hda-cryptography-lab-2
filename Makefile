@@ -58,13 +58,13 @@ invert-sbox: src/invert-sbox.cpp
 	clang++ --std=c++20 -O3 -Wall $< -o $@
 
 %.pcm: src/%.cppm
-	clang++ -std=c++20 $< --precompile -o $@
+	clang++ -std=c++20 -O3 -Wall $< --precompile -o $@
 
 key-recovery: src/key-recovery.cpp AesFunctions.pcm
-	clang++ -std=c++20 -fprebuilt-module-path=. $^ -o $@ -lcrypto
+	clang++ -std=c++20 -O3 -Wall -fprebuilt-module-path=. $^ -o $@ -lcrypto
 
 compare-implementations: src/compare-implementations.cpp AesFunctions.pcm
-	clang++ -std=c++20 -fprebuilt-module-path=. $^ -o $@ -lcrypto
+	clang++ -std=c++20 -O3 -Wall -fprebuilt-module-path=. $^ -o $@ -lcrypto
 
 # Verify that the implementations work
 test:	compare-implementations simple-aes openssl-aes invert-sbox key-recovery
